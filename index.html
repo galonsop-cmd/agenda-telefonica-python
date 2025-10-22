@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agenda Telefónica</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      margin: 0;
+      padding: 20px;
+    }
+ 
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+ 
+    form {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      max-width: 500px;
+      margin: 0 auto 30px;
+    }
+ 
+    form input, form button {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+ 
+    form button {
+      background-color: #007bff;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+ 
+    form button:hover {
+      background-color: #0056b3;
+    }
+ 
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+ 
+    th, td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+      text-align: left;
+    }
+ 
+    th {
+      background-color: #007bff;
+      color: white;
+    }
+ 
+    .btn-delete {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+ 
+    .btn-delete:hover {
+      background-color: #a71d2a;
+    }
+  </style>
+</head>
+<body>
+  <h1>📒 Agenda Telefónica</h1>
+ 
+  <form id="contactForm">
+    <input type="text" id="nombre" placeholder="Nombre" required />
+    <input type="text" id="apellido" placeholder="Apellido" required />
+    <input type="tel" id="telefono" placeholder="Teléfono" required />
+    <input type="text" id="direccion" placeholder="Dirección" required />
+    <input type="text" id="actividad" placeholder="Actividad económica" required />
+    <button type="submit">Agregar Contacto</button>
+  </form>
+ 
+  <table id="contactTable">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Teléfono</th>
+        <th>Dirección</th>
+        <th>Actividad</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+ 
+  <script>
+    const form = document.getElementById("contactForm");
+    const tableBody = document.querySelector("#contactTable tbody");
+ 
+    // Cargar contactos desde localStorage al iniciar
+    document.addEventListener("DOMContentLoaded", mostrarContactos);
+ 
+    // Agregar contacto
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+ 
+      const contacto = {
+        nombre: document.getElementById("nombre").value,
+        apellido: document.getElementById("apellido").value,
+        telefono: document.getElementById("telefono").value,
+        direccion: document.getElementById("direccion").value,
+        actividad: document.getElementById("actividad").value,
+      };
+ 
+      let contactos = JSON.parse(localStorage.getItem("contactos")) || [];
+      contactos.push(contacto);
+      localStorage.setItem("contactos", JSON.stringify(contactos));
+ 
+      form.reset();
+      mostrarContactos();
+    });
+ 
+    // Mostrar contactos
+    function mostrarContactos() {
+      const contactos = JSON.parse(localStorage.getItem("contactos")) || [];
+      tableBody.innerHTML = "";
+ 
+      contactos.forEach((c, index) => {
+        const row = document.createElement("tr");
+ 
+        row.innerHTML = `
+          <td>${c.nombre}</td>
+          <td>${c.apellido}</td>
+          <td>${c.telefono}</td>
+          <td>${c.direccion}</td>
+          <td>${c.actividad}</td>
+          <td><button class="btn-delete" onclick="eliminarContacto(${index})">Eliminar</button></td>
+        `;
+ 
+        tableBody.appendChild(row);
+      });
+    }
+ 
+    // Eliminar contacto
+    function eliminarContacto(index) {
+      let contactos = JSON.parse(localStorage.getItem("contactos")) || [];
+      contactos.splice(index, 1);
+      localStorage.setItem("contactos", JSON.stringify(contactos));
+      mostrarContactos();
+    }
+  </script>
+</body>
+</html>
