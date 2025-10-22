@@ -2,3 +2,4 @@ https://github.com/galonsopinilla-collab/agenda-telefonica-python.git# agenda-te
 agenda telefonica python
 
 git config --global user.name "galonsopinilla-collab"
+git config --global user.email "galonsopinilla@gmail.com"
